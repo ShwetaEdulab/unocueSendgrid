@@ -16,13 +16,11 @@ sendEmail:(data,callback)=>{
 			var fn = require('jade').compile(file);
 			var html = fn(data);
 
-
-            
         	const msg = {
                 to: data.email,
                 toname:data.name,
-                from: 'info@etranscript.in',
-                fromname:'test uncocue',
+                from: constant.UNOCUE_SEND_EMAIL_FROM,
+                fromname:constant.UNOCUE_SEND_EMAIL_FROM_NAME,
                 subject: 'Sending with SendGrid is Fun',
                 text: 'Unocue email verification test',
                 html: html,
@@ -39,6 +37,26 @@ sendEmail:(data,callback)=>{
               });
         
        })	
+},
+
+sendOtp: function(emailOptions, callback) {
+    var mailOptions = {
+        from: constant.UNOCUE_SEND_EMAIL_FROM,
+        fromname:constant.UNOCUE_SEND_EMAIL_FROM_NAME,
+        to: emailOptions.to,
+        toname: (emailOptions.toName != null) ? emailOptions.toName : '',
+        subject: emailOptions.subject,
+        text: emailOptions.text
+    };
+    console.log('mailoptions',mailOptions)
+    sgMail.send(mailOptions, function(err, json) {
+        if (err) {
+            callback(err);
+        }else {
+            console.log('sent')
+            callback();
+        }
+    });
 },
 // sendEmailAttachment:(data,callback)=>{
 
